@@ -13,15 +13,7 @@ const Person = ({transaction}) => {
     const [totalPoints, setTotalPoints] = useState(0);
 
     useEffect(() => {
-        calculatePoints();
-    }, []);
-
-    useEffect(() => {
-        setTotalPoints(() => month_1Points + month_2Points + month_3Points);
-    }, [month_1Points, month_2Points, month_3Points]);
-
-    const calculatePoints = () => {
-        transaction.transactions.map((n) => {
+        transaction.transactions.forEach((n) => {
             let month = n.date.split("/")[0];
 
             if (parseInt(month) === curMonth) {
@@ -32,7 +24,11 @@ const Person = ({transaction}) => {
                 addPoints(setMonth_3Points, n);
             }
         });
-    };
+    }, [curMonth, transaction.transactions]);
+
+    useEffect(() => {
+        setTotalPoints(() => month_1Points + month_2Points + month_3Points);
+    }, [month_1Points, month_2Points, month_3Points]);
 
     const addPoints = (setterFunc, n) => {
         if (n.amount > 100) {
